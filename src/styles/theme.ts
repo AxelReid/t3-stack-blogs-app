@@ -20,9 +20,7 @@ const theme = ({ colorScheme }: Props): MantineThemeOverride => ({
   colorScheme,
   fontFamily: 'Sora, sans-serif',
   defaultRadius: 6,
-  activeStyles: {
-    transition: 'transform .2s',
-  },
+  activeStyles: { transform: 'none' },
   components: {
     Input: {
       defaultProps: {

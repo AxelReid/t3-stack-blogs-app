@@ -62,13 +62,15 @@ const LoginForm = ({ type = 'sign-in' }: Props) => {
       const res = await axios.post('/api/register', body)
       console.log(res)
 
-      if (res.status === 200)
-        router.push({ pathname: '/sign-in', query: router.query })
-
-      showNotification({
-        color: 'green',
-        message: 'New user successfully created',
-      })
+      if (res.status === 200) {
+        await login({ email: body.email, password: body.password })
+        showNotification({
+          color: 'green',
+          message: 'New user successfully created',
+        })
+        return
+      }
+      router.push({ pathname: '/sign-in', query: router.query })
       showNotification({ color: 'yellow', message: 'Login to your account' })
     } catch (error: any) {
       const err = error?.response?.data.error
@@ -83,7 +85,7 @@ const LoginForm = ({ type = 'sign-in' }: Props) => {
     }
   }
 
-  const login = async (body: FormTypes) => {
+  const login = async (body: { email: string; password: string }) => {
     try {
       const res = await signIn('credentials', {
         redirect: false,

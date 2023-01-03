@@ -95,8 +95,8 @@ const BlogForm = memo(
             </Text>
             <MyRichText
               content={form.values.body}
-              error={form.errors?.body}
-              {...form.getInputProps('body')}
+              error={form.errors?.body as string}
+              setContent={(value: string) => form.setFieldValue('body', value)}
             />
           </Box>
           <ImageForm

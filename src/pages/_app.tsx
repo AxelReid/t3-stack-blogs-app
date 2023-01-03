@@ -22,8 +22,10 @@ const MyApp: AppType<{
     getInitialValueInEffect: true,
   })
 
-  const toggleColorScheme = (value?: ColorScheme) =>
-    setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'))
+  const toggleColorScheme = (value?: ColorScheme) => {
+    const newColorScheme = value || (colorScheme === 'dark' ? 'light' : 'dark')
+    setColorScheme(newColorScheme)
+  }
 
   useHotkeys([['mod+J', () => toggleColorScheme()]])
 

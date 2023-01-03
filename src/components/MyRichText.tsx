@@ -1,11 +1,12 @@
 import { createStyles, Text } from '@mantine/core'
-import { RichTextEditor, Link, RichTextEditorProps } from '@mantine/tiptap'
+import { RichTextEditor, Link } from '@mantine/tiptap'
 import { Editor, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
 import TextAlign from '@tiptap/extension-text-align'
 import Superscript from '@tiptap/extension-superscript'
 import SubScript from '@tiptap/extension-subscript'
+import { useEffect } from 'react'
 
 const useStyles = createStyles((theme) => ({
   input: {
@@ -23,13 +24,10 @@ const useStyles = createStyles((theme) => ({
 interface Props {
   error: string | undefined
   content: string
+  setContent: (value: string) => void
 }
 
-const MyRichText = ({
-  error,
-  content,
-  ...props
-}: RichTextEditorProps & Props) => {
+const MyRichText = ({ error, content, setContent }: Props) => {
   const { classes, cx } = useStyles()
 
   const editor = useEditor({
@@ -44,10 +42,15 @@ const MyRichText = ({
     ],
   })
 
+  useEffect(() => {
+    const value = editor?.getHTML()
+    if (value !== undefined) setContent(value)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editor?.getHTML()])
+
   return (
     <div>
       <RichTextEditor
-        {...props}
         editor={editor as Editor}
         classNames={{
           root: cx(classes.input, {
@@ -56,6 +59,11 @@ const MyRichText = ({
         }}
         styles={{
           root: { overflow: 'hidden', borderRadius: 7 },
+          content: {
+            '& > div': {
+              minHeight: 200,
+            },
+          },
         }}
       >
         <RichTextEditor.Toolbar>
@@ -97,7 +105,7 @@ const MyRichText = ({
           </RichTextEditor.ControlsGroup>
         </RichTextEditor.Toolbar>
 
-        <RichTextEditor.Content mih={200} />
+        <RichTextEditor.Content />
       </RichTextEditor>
       {error && (
         <Text c='red' fz='sm' mt={3}>
